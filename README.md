@@ -36,7 +36,7 @@ Plugin ini saat ini dikembangkan secara khusus untuk kebutuhan internal **CV. Ar
 Install package menggunakan Composer:
 
 ```
-composer require aranus/chatbot
+composer require aranus/chatbotv1
 ```
 
 Laravel akan secara otomatis mendeteksi package melalui fitur **Package Auto Discovery**.
