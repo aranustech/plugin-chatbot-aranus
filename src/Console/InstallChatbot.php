@@ -7,7 +7,6 @@ use Illuminate\Console\Command;
 class InstallChatbot extends Command
 {
     protected $signature = 'chatbot:install';
-
     protected $description = 'Install Aranus Chatbot package';
 
     public function handle()
@@ -24,6 +23,10 @@ class InstallChatbot extends Command
 
         $this->call('vendor:publish', [
             '--tag' => 'chatbot-views'
+        ]);
+
+        $this->call('vendor:publish', [
+            '--tag' => 'chatbot-migrations'
         ]);
 
         $this->call('migrate');

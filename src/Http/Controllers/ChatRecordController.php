@@ -5,15 +5,12 @@ namespace Aranus\Chatbot\Http\Controllers;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
-use Aranus\Chatbot\src\Models\ChatRecord;
+use Aranus\Chatbot\Models\ChatRecord;
 
 class ChatRecordController extends Controller
 {
     public function store(Request $request)
     {
-
-        dd($request->all());
-        
         $request->validate([
             'session_code'   => 'nullable|string',
             'client_message' => 'required|string',
@@ -35,8 +32,8 @@ class ChatRecordController extends Controller
         $chatRecords = ChatRecord::orderBy('waktu', 'desc')->get();
 
         return view('dashboard.chatlog.index', [
-            'chats'   => $chatRecords,
-            'active'  => 'chatlog',
+            'chats'  => $chatRecords,
+            'active' => 'chatlog',
         ]);
     }
 
@@ -51,7 +48,6 @@ class ChatRecordController extends Controller
                 ->get();
 
             return response()->json($popular);
-
         } catch (\Exception $e) {
             return response()->json([
                 'error' => 'Gagal mengambil data: ' . $e->getMessage(),
