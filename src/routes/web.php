@@ -9,6 +9,6 @@ Route::get('/chat-records', [ChatRecordController::class, 'index'])->name('chat.
 
 Route::get('/popular-questions', [ChatRecordController::class, 'popularQuestions']);
 
-Route::get('/chatbot-icon', function () {
-    return response()->file(base_path('packages/Aranus/Chatbot/icon-aranus.png'));
-});
+// Route::get('/chatbot-icon', function () {
+//     return response()->file(base_path('packages/Aranus/Chatbot/icon-aranus.png'));
+// });

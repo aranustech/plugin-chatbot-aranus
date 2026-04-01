@@ -7,7 +7,7 @@
   <div id="chatbot-toggle-wrapper">
         <div class="gradient-border"></div> 
         <div class="white-bg"></div>        
-        <img id="chatbot-toggle" src="/chatbot-icon" alt="Chatbot Logo">
+        <img id="chatbot-toggle" src="https://www.aranustech.co.id/assets/icon-aranus2.png" alt="Chatbot Logo">
   </div>
   <div id="chatbot-welcome-card">
     <p>Halo Client 👋<br>
@@ -15,14 +15,14 @@
   </div>
   <div id="chatbot-box">
     <div class="card-header">
-      <img id="chatbot-resize" src="/chatbot-icon" alt="Chatbot Logo">
+      <img id="chatbot-resize" src="https://www.aranustech.co.id/assets/icon-aranus2.png" alt="Chatbot Logo">
       <span class="toggle-text">Minara Assistant</span>
       <button id="chatbot-close" type="button" class="btn btn-sm btn-light">×</button>
     </div>    
     <div id="chatbot-messages">
       <!-- Pesan pembuka dari AI -->
       <div class="chat-ai-row">
-        <img class="chat-ai-avatar" src="/chatbot-icon" alt="Chatbot Logo">
+        <img class="chat-ai-avatar" src="https://www.aranustech.co.id/assets/icon-aranus2.png" alt="Chatbot Logo">
         <div id="chatbot-halo-client" class="chat-ai chat-msg fade-in">
           Halo Client! 👋 Ada yang bisa saya bantu hari ini?
         </div>
@@ -724,7 +724,7 @@ async function fetchPopularQuestions() {
     chatRow.classList.add("chat-ai-row");
 
     const avatar = document.createElement("img");
-    avatar.src = "/chatbot-icon";
+    avatar.src = "https://www.aranustech.co.id/assets/icon-aranus2.png";
     avatar.classList.add("chat-ai-avatar");
 
     currentBotBubble = document.createElement("div");
