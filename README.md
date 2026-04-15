@@ -1,101 +1,115 @@
-# Aranus Chatbot
+# Aranus Chatbot V2 (Minara AI)
 
-Aranus Chatbot adalah package Laravel untuk menampilkan widget chatbot Minara pada website Anda.
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/aranus-tech/chatbot.svg?style=flat-square)](https://packagist.org/packages/aranus-tech/chatbot)
+[![Total Downloads](https://img.shields.io/packagist/dt/aranus-tech/chatbot.svg?style=flat-square)](https://packagist.org/packages/aranus-tech/chatbot)
+[![License](https://img.shields.io/packagist/l/aranus-tech/chatbot.svg?style=flat-square)](https://packagist.org/packages/aranus-tech/chatbot)
 
-## Requirements
+Aranus Chatbot adalah package Laravel profesional untuk mengintegrasikan chatbot AI **Minara**, sistem **Live Chat Handover** (Admin), dan **RAG Knowledge Base** ke dalam ekosistem website Anda secara *plug-and-play*.
 
-- PHP ^8.1
-- Laravel ^10.0 | ^11.0 | ^12.0
+---
 
-## Installation
+## ✨ Fitur Utama (V2.0)
 
-Install package menggunakan Composer:
+- 🤖 **Minara AI Widget**: Chatbot cerdas berbasis AI yang siap membantu pengunjung website 24/7.
+- 👨‍💼 **Human-in-the-Loop (Live Chat)**: Fitur oper alih percakapan dari AI ke Admin secara *real-time* menggunakan WebSocket.
+- 📚 **RAG Knowledge Base**: Latih AI Minara dengan mengunggah dokumen (PDF, TXT, Excel, Docx) langsung dari dashboard.
+- 🔍 **Dataset Viewer**: Pantau konten teks yang berhasil diekstraksi dan dipelajari oleh AI.
+- 📝 **Advanced Chat Logs**: Riwayat percakapan lengkap yang dipisahkan antara interaksi AI dan Admin.
+- 🎨 **UI Isolation**: Menggunakan *pre-compiled CSS* sehingga tampilan chatbot tetap konsisten tanpa merusak desain website asli klien (tidak memerlukan Tailwind di aplikasi utama).
+
+---
+
+## 📋 Persyaratan Sistem
+
+- **PHP**: `^8.1`
+- **Laravel**: `^10.0` | `^11.0` | `^12.0`
+- **Database**: MySQL / PostgreSQL / SQLite
+
+---
+
+## 🚀 Instalasi
+
+### 1. Instal melalui Composer
+
+Tarik package ke dalam project Laravel Anda:
 
 ```bash
-composer require aranus-tech/chatbot:dev-main
-````
+composer require aranus-tech/chatbot
+```
 
-Laravel akan otomatis mendeteksi package melalui fitur Package Auto Discovery.
+### 2. Jalankan Perintah Instalasi
 
-Setelah itu jalankan perintah install:
+Perintah ini akan menyalin file konfigurasi (`config/chatbot.php`) dan aset visual (CSS & Ikon) ke folder publik project Anda:
 
 ```bash
 php artisan chatbot:install
 ```
 
-## Configuration
+### 3. Jalankan Migrasi Database
 
-Publish file konfigurasi jika diperlukan:
+Package ini secara otomatis memuat migrasi yang diperlukan untuk tabel log chat dan dokumen:
 
 ```bash
-php artisan vendor:publish --tag=chatbot-config
+php artisan migrate
 ```
 
-Isi file `config/chatbot.php`:
+---
+
+## ⚙️ Konfigurasi
+
+### 1. Environment Variables (.env)
+Tambahkan variabel berikut untuk menghubungkan widget dengan server AI Aranus:
+
+```env
+# Endpoint WebSocket & API
+CHATBOT_WS_URL="wss://aranus-aranus-chatbot-plugin.hf.space/ws/chat"
+CHATBOT_ADMIN_WS_URL="wss://aranus-aranus-chatbot-plugin.hf.space/ws/admin"
+CHATBOT_UPLOAD_URL="https://aranus-aranus-chatbot-plugin.hf.space/upload"
+
+# Notifikasi
+ADMIN_NOTIFICATION_EMAIL="admin@aranustech.co.id"
+```
+
+### 2. Konfigurasi Dashboard (config/chatbot.php)
+Anda dapat menyesuaikan integrasi dashboard agar selaras dengan sistem admin yang sudah ada:
 
 ```php
-<?php
-
 return [
-    'ws_url' => env('CHATBOT_WS_URL', 'wss://aranus-api-chatbot.hf.space/ws/chat'),
-    'icon_url' => env('CHATBOT_ICON_URL', 'https://www.aranustech.co.id/assets/icon-aranus2.png'),
+    'layout'     => 'layouts.app',      // Nama blade layout utama Anda
+    'prefix'     => 'dashboard',       // Prefix URL (misal: dashboard/live-chat)
+    'middleware' => ['web', 'auth'],   // Middleware untuk mengamankan akses admin
 ];
 ```
 
-Lalu tambahkan ke file `.env` jika ingin mengubah default:
+---
 
-```env
-CHATBOT_WS_URL=wss://aranus-api-chatbot.hf.space/ws/chat
-CHATBOT_ICON_URL=https://www.aranustech.co.id/assets/icon-aranus2.png
-```
+## 🖥️ Penggunaan
 
-## Usage
-
-Letakkan directive berikut di layout Blade utama, biasanya sebelum tag penutup `</body>`:
+### 1. Menampilkan Widget di Website
+Tambahkan pemanggilan CSS di tag `<head>` dan directive blade sebelum tag penutup `</body>` pada file layout utama Anda (misal: `app.blade.php`):
 
 ```blade
-@chatbot
-```
-
-Contoh penggunaan:
-
-```blade
+<head>
+    <link rel="stylesheet" href="{{ asset('vendor/chatbot/chatbot-ui.css') }}">
+</head>
 <body>
-    @yield('content')
+    
     @chatbot
 </body>
 ```
 
-## Routes
+### 2. Integrasi Dashboard Admin
+Package ini secara otomatis mendaftarkan rute dashboard. Anda cukup menambahkan tautan berikut ke sidebar navigasi admin Anda:
 
-Package ini mendaftarkan route berikut:
+| Menu | Nama Route | Deskripsi |
+|------|------------|-----------|
+| **Live Chat** | `route('chatbot.livechat')` | Membalas pesan klien secara real-time |
+| **Knowledge Base** | `route('chatbot.kb')` | Upload dokumen pelatihan AI |
+| **Dataset** | `route('chatbot.kb.dataset')` | Lihat teks hasil ekstraksi AI |
+| **Chat Logs** | `route('chatbot.index')` | Riwayat percakapan AI & Admin |
 
-* `POST /aranus-chatbot/store-chat`
-* `GET /aranus-chatbot/chat-records`
-* `GET /aranus-chatbot/popular-questions`
+---
 
-## Notes
+## 📄 Lisensi
 
-Pastikan layout utama Anda memiliki CSRF token:
-
-```blade
-<meta name="csrf-token" content="{{ csrf_token() }}">
-```
-
-## Stable Release
-
-Saat ini contoh instalasi menggunakan branch development:
-
-```bash
-composer require aranus-tech/chatbot:dev-main
-```
-
-Jika nanti package sudah memiliki tag release, Anda bisa mengubah instalasinya menjadi seperti ini:
-
-```bash
-composer require aranus-tech/chatbot:^1.0
-```
-
-## License
-
-MIT
+Package ini dilisensikan di bawah MIT License. Dikembangkan oleh Aranus Technology.

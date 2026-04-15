@@ -9,13 +9,23 @@ class ChatbotServiceProvider extends ServiceProvider
 {
     public function boot()
     {
+        // 1. Blade Directive (V1)
         Blade::directive('chatbot', function () {
             return "<?php echo view('chatbot::widget')->render(); ?>";
         });
 
+        // 2. Load Routes (V1 & V2)
         $this->loadRoutesFrom(__DIR__ . '/routes/web.php');
+
+        // 3. Load Views
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'chatbot');
+
+        // 4. Load Migrations (Otomatis jalan saat php artisan migrate tanpa perlu di-publish)
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+
+        // ==========================================
+        // FITUR PUBLISH (Kustomisasi untuk Klien)
+        // ==========================================
 
         $this->publishes([
             __DIR__ . '/../resources/views' => resource_path('views/vendor/chatbot'),
@@ -28,10 +38,7 @@ class ChatbotServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../assets' => public_path('vendor/chatbot'),
         ], 'chatbot-assets');
-
-        $this->publishes([
-            __DIR__ . '/../database/migrations/' => database_path('migrations'),
-        ], 'chatbot-migrations');
+        
     }
 
     public function register()
