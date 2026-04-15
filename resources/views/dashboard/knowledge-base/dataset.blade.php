@@ -1,4 +1,4 @@
-@extends('layouts.dashboard')
+@extends(config('chatbot.layout', 'layouts.app'))
 
 @section('content')
     <section id="breadcrumbs" class="mb-2">

@@ -1,4 +1,8 @@
-@extends('layouts.dashboard')
+@extends(config('chatbot.layout', 'layouts.app'))
+
+@push('custome-css')
+    <link rel="stylesheet" href="{{ asset('vendor/chatbot/chatbot-ui.css') }}">
+@endpush
 
 @section('content')
     <section id="breadcrumbs" class="mb-2">
@@ -269,12 +273,4 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
-<style>
-    /* CSS Khusus untuk Live Chat Admin */
-    .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-    .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 10px; }
-    @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    .animate-fade-in-up { animation: fadeInUp 0.3s ease forwards; }
-</style>
 @endpush

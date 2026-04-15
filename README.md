@@ -1,6 +1,10 @@
 # Aranus Chatbot V2 (Minara AI)
 
-Aranus Chatbot adalah package Laravel profesional untuk mengintegrasikan widget chatbot AI **Minara**, sistem **Live Chat Handover** (Admin), dan **RAG Knowledge Base** ke dalam ekosistem website Anda secara *plug-and-play*.
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/aranus-tech/chatbot.svg?style=flat-square)](https://packagist.org/packages/aranus-tech/chatbot)
+[![Total Downloads](https://img.shields.io/packagist/dt/aranus-tech/chatbot.svg?style=flat-square)](https://packagist.org/packages/aranus-tech/chatbot)
+[![License](https://img.shields.io/packagist/l/aranus-tech/chatbot.svg?style=flat-square)](https://packagist.org/packages/aranus-tech/chatbot)
+
+Aranus Chatbot adalah package Laravel profesional untuk mengintegrasikan chatbot AI **Minara**, sistem **Live Chat Handover** (Admin), dan **RAG Knowledge Base** ke dalam ekosistem website Anda secara *plug-and-play*.
 
 ---
 
@@ -9,8 +13,9 @@ Aranus Chatbot adalah package Laravel profesional untuk mengintegrasikan widget 
 - 🤖 **Minara AI Widget**: Chatbot cerdas berbasis AI yang siap membantu pengunjung website 24/7.
 - 👨‍💼 **Human-in-the-Loop (Live Chat)**: Fitur oper alih percakapan dari AI ke Admin secara *real-time* menggunakan WebSocket.
 - 📚 **RAG Knowledge Base**: Latih AI Minara dengan mengunggah dokumen (PDF, TXT, Excel, Docx) langsung dari dashboard.
-- 🔍 **Dataset Viewer**: Pantau teks yang berhasil diekstraksi dan dipelajari oleh AI dari dokumen yang diunggah.
-- 📝 **Advanced Chat Logs**: Rekaman riwayat obrolan yang terpisah antara interaksi AI dan Admin dengan filter rentang tanggal.
+- 🔍 **Dataset Viewer**: Pantau konten teks yang berhasil diekstraksi dan dipelajari oleh AI.
+- 📝 **Advanced Chat Logs**: Riwayat percakapan lengkap yang dipisahkan antara interaksi AI dan Admin.
+- 🎨 **UI Isolation**: Menggunakan *pre-compiled CSS* sehingga tampilan chatbot tetap konsisten tanpa merusak desain website asli klien (tidak memerlukan Tailwind di aplikasi utama).
 
 ---
 
@@ -34,7 +39,7 @@ composer require aranus-tech/chatbot
 
 ### 2. Jalankan Perintah Instalasi
 
-Perintah ini akan menyalin file konfigurasi, aset gambar, dan file migrasi ke project utama:
+Perintah ini akan menyalin file konfigurasi (`config/chatbot.php`) dan aset visual (CSS & Ikon) ke folder publik project Anda:
 
 ```bash
 php artisan chatbot:install
@@ -42,7 +47,7 @@ php artisan chatbot:install
 
 ### 3. Jalankan Migrasi Database
 
-Buat tabel `chat_records` dan `knowledge_documents` yang diperlukan:
+Package ini secara otomatis memuat migrasi yang diperlukan untuk tabel log chat dan dokumen:
 
 ```bash
 php artisan migrate
@@ -52,7 +57,8 @@ php artisan migrate
 
 ## ⚙️ Konfigurasi
 
-Setelah instalasi, silakan buka file `.env` Anda dan tambahkan variabel berikut untuk menghubungkan ke server AI Aranus:
+### 1. Environment Variables (.env)
+Tambahkan variabel berikut untuk menghubungkan widget dengan server AI Aranus:
 
 ```env
 # Endpoint WebSocket & API
@@ -64,37 +70,43 @@ CHATBOT_UPLOAD_URL="https://aranus-aranus-chatbot-plugin.hf.space/upload"
 ADMIN_NOTIFICATION_EMAIL="admin@aranustech.co.id"
 ```
 
+### 2. Konfigurasi Dashboard (config/chatbot.php)
+Anda dapat menyesuaikan integrasi dashboard agar selaras dengan sistem admin yang sudah ada:
+
+```php
+return [
+    'layout'     => 'layouts.app',      // Nama blade layout utama Anda
+    'prefix'     => 'dashboard',       // Prefix URL (misal: dashboard/live-chat)
+    'middleware' => ['web', 'auth'],   // Middleware untuk mengamankan akses admin
+];
+```
+
 ---
 
 ## 🖥️ Penggunaan
 
 ### 1. Menampilkan Widget di Website
-
-Tambahkan directive blade berikut di file layout utama Anda (misalnya `app.blade.php`), tepat sebelum tag penutup `</body>`:
+Tambahkan pemanggilan CSS di tag `<head>` dan directive blade sebelum tag penutup `</body>` pada file layout utama Anda (misal: `app.blade.php`):
 
 ```blade
-@chatbot
+<head>
+    <link rel="stylesheet" href="{{ asset('vendor/chatbot/chatbot-ui.css') }}">
+</head>
+<body>
+    
+    @chatbot
+</body>
 ```
 
 ### 2. Integrasi Dashboard Admin
+Package ini secara otomatis mendaftarkan rute dashboard. Anda cukup menambahkan tautan berikut ke sidebar navigasi admin Anda:
 
-Package ini secara otomatis mendaftarkan rute dashboard. Anda dapat menambahkan tautan berikut ke sidebar admin Anda:
-
-| Menu | Route Name | Deskripsi |
+| Menu | Nama Route | Deskripsi |
 |------|------------|-----------|
-| Live Chat | `route('chatbot.livechat')` | Membalas pesan klien secara langsung |
-| Knowledge Base | `route('chatbot.kb')` | Upload dokumen untuk melatih AI |
-| Chat Logs | `route('chatbot.index')` | Melihat riwayat percakapan lengkap |
-
----
-
-## 🧪 Testing
-
-Package ini sudah dilengkapi dengan pengujian otomatis menggunakan PHPUnit. Untuk menjalankan tes:
-
-```bash
-composer test
-```
+| **Live Chat** | `route('chatbot.livechat')` | Membalas pesan klien secara real-time |
+| **Knowledge Base** | `route('chatbot.kb')` | Upload dokumen pelatihan AI |
+| **Dataset** | `route('chatbot.kb.dataset')` | Lihat teks hasil ekstraksi AI |
+| **Chat Logs** | `route('chatbot.index')` | Riwayat percakapan AI & Admin |
 
 ---
 

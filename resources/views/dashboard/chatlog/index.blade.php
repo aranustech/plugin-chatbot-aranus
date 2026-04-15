@@ -1,4 +1,4 @@
-@extends('layouts.dashboard')
+@extends(config('chatbot.layout', 'layouts.app'))
 
 @push('custome-css')
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css">

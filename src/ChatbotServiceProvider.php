@@ -9,20 +9,18 @@ class ChatbotServiceProvider extends ServiceProvider
 {
     public function boot()
     {
-        // 1. Blade Directive (V1 - Tetap dipertahankan)
-        // Memungkinkan pengguna web cukup mengetik @chatbot di footer mereka
+        // 1. Blade Directive (V1)
         Blade::directive('chatbot', function () {
             return "<?php echo view('chatbot::widget')->render(); ?>";
         });
 
-        // 2. Load Routes (Mencakup Route V1 dan rute Dashboard V2 baru)
+        // 2. Load Routes (V1 & V2)
         $this->loadRoutesFrom(__DIR__ . '/routes/web.php');
 
-        // 3. Load Views (Prefix yang digunakan adalah 'chatbot::')
+        // 3. Load Views
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'chatbot');
 
-        // 4. Load Migrations (V1 & V2)
-        // Otomatis membaca file migration chat_records (V1) & knowledge_documents (V2)
+        // 4. Load Migrations (Otomatis jalan saat php artisan migrate tanpa perlu di-publish)
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 
         // ==========================================
@@ -40,21 +38,16 @@ class ChatbotServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../assets' => public_path('vendor/chatbot'),
         ], 'chatbot-assets');
-
-        $this->publishes([
-            __DIR__ . '/../database/migrations/' => database_path('migrations'),
-        ], 'chatbot-migrations');
+        
     }
 
     public function register()
     {
-        // Gabungkan konfigurasi bawaan package dengan konfigurasi user
         $this->mergeConfigFrom(
             __DIR__ . '/../config/chatbot.php',
             'chatbot'
         );
 
-        // Daftarkan Custom Artisan Command (Misal: php artisan chatbot:install)
         if ($this->app->runningInConsole()) {
             $this->commands([
                 \Aranus\Chatbot\Console\InstallChatbot::class,

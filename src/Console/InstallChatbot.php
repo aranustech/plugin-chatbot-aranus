@@ -27,17 +27,10 @@ class InstallChatbot extends Command
             '--force' => true
         ]);
 
-        // 2. Publish Assets (Gambar Ikon)
-        $this->comment('Mem-publish aset gambar...');
+        // 2. Publish Assets (Gambar Ikon & CSS)
+        $this->comment('Mem-publish aset gambar & CSS...');
         $this->callSilent('vendor:publish', [
             '--tag' => 'chatbot-assets', 
-            '--force' => true
-        ]);
-
-        // 3. Publish Migrations
-        $this->comment('Mem-publish file database migrations...');
-        $this->callSilent('vendor:publish', [
-            '--tag' => 'chatbot-migrations', 
             '--force' => true
         ]);
 
