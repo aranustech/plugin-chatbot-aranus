@@ -15,7 +15,6 @@ class ChatRecord extends Model
         'session_code',
         'client_message',
         'ai_message',
-        'admin_message', // <-- INI YANG WAJIB DITAMBAHKAN 🔥
         'waktu',
     ];
 
