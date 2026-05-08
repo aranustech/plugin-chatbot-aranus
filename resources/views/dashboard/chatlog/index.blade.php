@@ -1,16 +1,12 @@
 @extends(config('chatbot.layout', 'layouts.app'))
 
-@push('custome-css')
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css">
-@endpush
-
 @section('content')
     <section id="breadcrumbs" class="mb-2">
         <div class="container">
             <nav aria-label="Breadcrumb">
                 <ol class="flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse !pl-0">
                     <li class="inline-flex items-center">
-                        <a href="/dashboard" class="inline-flex items-center text-sm font-medium text-body hover:text-fg-brand">
+                        <a href="/dashboard" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-gray-600">
                             <svg class="w-4 h-4 me-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m4 12 8-8 8 8M6 10.5V19a1 1 0 0 0 1 1h3v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3h3a1 1 0 0 0 1-1v-8.5"/>
                             </svg>
@@ -19,15 +15,15 @@
                     </li>
                     <li aria-current="page">
                         <div class="flex items-center space-x-1.5">
-                            <svg class="w-3.5 h-3.5 rtl:rotate-180 text-body" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                            <svg class="w-3.5 h-3.5 rtl:rotate-180 text-gray-700" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/>
                             </svg>
-                            <span class="inline-flex items-center text-sm font-medium text-body-subtle">Chat Log</span>
+                            <span class="inline-flex items-center text-sm font-medium text-gray-500">Chat Log</span>
                         </div>
                     </li>
                 </ol>
             </nav>
-            <h2 class="font-figtree !font-semibold">Chat Log</h2>
+            <h2 class="font-sans !font-semibold">Chat Log</h2>
         </div>
     </section>
 
@@ -37,7 +33,6 @@
 
                 {{-- Tabs AI / Admin --}}
                 <div class="flex border-b border-gray-200">
-                    {{-- UBAH KE ROUTE PACKAGE: chatbot.index --}}
                     <a href="{{ route('chatbot.index', array_merge(request()->except('type', 'page'), ['type' => 'ai'])) }}"
                        class="flex items-center gap-2 px-5 py-3 text-sm font-medium border-b-2 transition-colors duration-150
                               {{ $type === 'ai' ? 'border-[#3B82F6] text-[#3B82F6]' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
@@ -46,7 +41,6 @@
                         </svg>
                         Chat AI
                     </a>
-                    {{-- UBAH KE ROUTE PACKAGE: chatbot.index --}}
                     <a href="{{ route('chatbot.index', array_merge(request()->except('type', 'page'), ['type' => 'admin'])) }}"
                        class="flex items-center gap-2 px-5 py-3 text-sm font-medium border-b-2 transition-colors duration-150
                               {{ $type === 'admin' ? 'border-amber-500 text-amber-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
@@ -60,33 +54,40 @@
                 {{-- Toolbar --}}
                 <div class="flex items-center justify-between p-4 border-b border-gray-200 flex-wrap gap-3">
                     <div class="flex items-center gap-2 flex-1 min-w-[280px] max-w-2xl">
-                        {{-- UBAH KE ROUTE PACKAGE: chatbot.index --}}
                         <form method="GET" action="{{ route('chatbot.index') }}" class="flex items-center gap-2 flex-1" id="filterForm">
-                        <input type="hidden" name="type" value="{{ $type }}">
-                        <div class="relative w-full">
-                            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                                </svg>
-                            </div>
-                            <input type="text" id="dateRange"
-                                value="{{ request('start_date') && request('end_date') ? \Carbon\Carbon::parse(request('start_date'))->format('d M Y') . ' – ' . \Carbon\Carbon::parse(request('end_date'))->format('d M Y') : '' }}"
-                                placeholder="Filter by date range..."
-                                readonly
-                                class="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-lg bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 cursor-pointer">
-                            <input type="hidden" name="start_date" id="startDateInput" value="{{ request('start_date') }}">
-                            <input type="hidden" name="end_date" id="endDateInput" value="{{ request('end_date') }}">
+                            <input type="hidden" name="type" value="{{ $type }}">
                             <input type="hidden" name="sort" value="{{ request('sort', 'latest') }}">
-                        </div>
-                        <button id="clearFilter" type="button"
-                            class="inline-flex items-center gap-1 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 px-3 py-2 rounded-lg transition-colors duration-150 whitespace-nowrap">
-                            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
-                            </svg>
-                            Clear
-                        </button>
+
+                            <div class="flex items-center gap-1.5">
+                                <label class="text-xs text-gray-500 whitespace-nowrap">Dari</label>
+                                <input type="date" name="start_date" id="startDateInput"
+                                    value="{{ request('start_date') }}"
+                                    class="px-2 py-2 text-sm border border-gray-300 rounded-lg bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <label class="text-xs text-gray-500 whitespace-nowrap">Sampai</label>
+                                <input type="date" name="end_date" id="endDateInput"
+                                    value="{{ request('end_date') }}"
+                                    class="px-2 py-2 text-sm border border-gray-300 rounded-lg bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+
+                            <button type="submit"
+                                class="inline-flex items-center gap-1 text-sm font-medium text-white bg-blue-500 hover:bg-blue-600 px-3 py-2 rounded-lg transition-colors duration-150 whitespace-nowrap">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/>
+                                </svg>
+                                Filter
+                            </button>
+
+                            <a href="{{ route('chatbot.index', ['type' => $type]) }}"
+                                class="inline-flex items-center gap-1 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 px-3 py-2 rounded-lg transition-colors duration-150 whitespace-nowrap">
+                                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                </svg>
+                                Clear
+                            </a>
                         </form>
-                        {{-- UBAH KE ROUTE PACKAGE: chatbot.index --}}
+
                         <a href="{{ route('chatbot.index', ['type' => $type, 'start_date' => request('start_date'), 'end_date' => request('end_date'), 'sort' => request('sort', 'latest') === 'latest' ? 'oldest' : 'latest']) }}"
                             class="inline-flex items-center gap-2 border border-gray-300 bg-gray-50 hover:bg-gray-100 text-gray-600 text-sm font-medium px-3 py-2 rounded-lg transition-colors duration-150 whitespace-nowrap">
                             <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -195,7 +196,7 @@
     <div id="chatModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50">
         <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl mx-4 overflow-hidden">
             <div class="flex items-center justify-between px-5 py-4 border-b border-gray-200 bg-gray-50">
-                <h5 class="text-sm font-semibold text-gray-800 font-figtree" id="modalTitle">Conversation Detail</h5>
+                <h5 class="text-sm font-semibold text-gray-800 font-sans" id="modalTitle">Conversation Detail</h5>
                 <button id="closeModal" class="text-gray-400 hover:text-gray-600 transition-colors">
                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
@@ -237,120 +238,77 @@
         </div>
     </div>
 
-@endsection
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Modal
+        const modal = document.getElementById('chatModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalAIContent = document.getElementById('modalAIContent');
+        const modalAdminContent = document.getElementById('modalAdminContent');
 
-@push('custome-js')
-<script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+        document.querySelectorAll('.btn-view').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const type = this.dataset.type;
+                document.getElementById('modalTime').textContent = this.dataset.time;
 
-<script>
-document.addEventListener('DOMContentLoaded', function () {
+                if (type === 'admin') {
+                    modalTitle.textContent = 'Admin Conversation Detail';
+                    modalAIContent.classList.add('hidden');
+                    modalAdminContent.classList.remove('hidden');
 
-    // Date range picker
-    $('#dateRange').daterangepicker({
-        autoUpdateInput: false,
-        locale: {
-            format: 'DD MMM YYYY',
-            cancelLabel: 'Cancel',
-            applyLabel: 'Apply'
-        },
-        opens: 'right',
-        alwaysShowCalendars: true,
-        startDate: $('#startDateInput').val() || moment(),
-        endDate: $('#endDateInput').val() || moment(),
-    });
+                    document.getElementById('modalAdminUser').textContent = this.dataset.user;
 
-    $('#dateRange').on('apply.daterangepicker', function(ev, picker) {
-        $(this).val(picker.startDate.format('DD MMM YYYY') + ' – ' + picker.endDate.format('DD MMM YYYY'));
-        $('#startDateInput').val(picker.startDate.format('YYYY-MM-DD'));
-        $('#endDateInput').val(picker.endDate.format('YYYY-MM-DD'));
-        $('#filterForm').submit();
-    });
+                    const messagesContainer = document.getElementById('modalAdminMessages');
+                    messagesContainer.innerHTML = '';
 
-    $('#dateRange').on('cancel.daterangepicker', function() {
-        $(this).val('');
-        $('#startDateInput').val('');
-        $('#endDateInput').val('');
-    });
-
-    document.getElementById('clearFilter').addEventListener('click', function() {
-        document.getElementById('dateRange').value = '';
-        document.getElementById('startDateInput').value = '';
-        document.getElementById('endDateInput').value = '';
-        document.getElementById('filterForm').submit();
-    });
-
-    // Modal
-    const modal = document.getElementById('chatModal');
-    const modalTitle = document.getElementById('modalTitle');
-    const modalAIContent = document.getElementById('modalAIContent');
-    const modalAdminContent = document.getElementById('modalAdminContent');
-
-    document.querySelectorAll('.btn-view').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const type = this.dataset.type;
-            document.getElementById('modalTime').textContent = this.dataset.time;
-
-            if (type === 'admin') {
-                // Admin chat mode
-                modalTitle.textContent = 'Admin Conversation Detail';
-                modalAIContent.classList.add('hidden');
-                modalAdminContent.classList.remove('hidden');
-
-                document.getElementById('modalAdminUser').textContent = this.dataset.user;
-
-                const messagesContainer = document.getElementById('modalAdminMessages');
-                messagesContainer.innerHTML = '';
-
-                try {
-                    const adminData = JSON.parse(this.dataset.admin);
-                    if (Array.isArray(adminData)) {
-                        adminData.forEach(msg => {
-                            const bubble = document.createElement('div');
-                            const isClient = msg.sender === 'client';
-                            bubble.className = `p-3 rounded-lg text-sm whitespace-pre-wrap break-words ${isClient ? 'bg-blue-50 border border-blue-100' : 'bg-amber-50 border border-amber-200'}`;
-                            bubble.innerHTML = `<span class="text-xs font-semibold ${isClient ? 'text-blue-600' : 'text-amber-600'}">${isClient ? 'Client' : 'Admin'}</span>` +
-                                (msg.time ? `<span class="text-xs text-gray-400 ml-2">${msg.time}</span>` : '') +
-                                `<div class="mt-1">${escapeHtml(msg.text)}</div>`;
-                            messagesContainer.appendChild(bubble);
-                        });
+                    try {
+                        const adminData = JSON.parse(this.dataset.admin);
+                        if (Array.isArray(adminData)) {
+                            adminData.forEach(msg => {
+                                const bubble = document.createElement('div');
+                                const isClient = msg.sender === 'client';
+                                bubble.className = `p-3 rounded-lg text-sm whitespace-pre-wrap break-words ${isClient ? 'bg-blue-50 border border-blue-100' : 'bg-amber-50 border border-amber-200'}`;
+                                bubble.innerHTML = `<span class="text-xs font-semibold ${isClient ? 'text-blue-600' : 'text-amber-600'}">${isClient ? 'Client' : 'Admin'}</span>` +
+                                    (msg.time ? `<span class="text-xs text-gray-400 ml-2">${msg.time}</span>` : '') +
+                                    `<div class="mt-1">${escapeHtml(msg.text)}</div>`;
+                                messagesContainer.appendChild(bubble);
+                            });
+                        }
+                    } catch (e) {
+                        messagesContainer.innerHTML = '<p class="text-sm text-gray-400">(Unable to parse conversation data)</p>';
                     }
-                } catch (e) {
-                    messagesContainer.innerHTML = '<p class="text-sm text-gray-400">(Unable to parse conversation data)</p>';
+                } else {
+                    modalTitle.textContent = 'Conversation Detail';
+                    modalAIContent.classList.remove('hidden');
+                    modalAdminContent.classList.add('hidden');
+
+                    document.getElementById('modalUser').textContent = this.dataset.user;
+                    document.getElementById('modalAI').textContent = this.dataset.ai;
                 }
-            } else {
-                // AI chat mode
-                modalTitle.textContent = 'Conversation Detail';
-                modalAIContent.classList.remove('hidden');
-                modalAdminContent.classList.add('hidden');
 
-                document.getElementById('modalUser').textContent = this.dataset.user;
-                document.getElementById('modalAI').textContent = this.dataset.ai;
-            }
-
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            });
         });
-    });
 
-    function escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
-    }
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
 
-    document.getElementById('closeModal').addEventListener('click', function() {
-        modal.classList.add('hidden');
-        modal.classList.remove('flex');
-    });
-
-    modal.addEventListener('click', function(e) {
-        if (e.target === modal) {
+        document.getElementById('closeModal').addEventListener('click', function() {
             modal.classList.add('hidden');
             modal.classList.remove('flex');
-        }
-    });
+        });
 
-});
-</script>
-@endpush
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        });
+    });
+    </script>
+
+@endsection

@@ -6,7 +6,7 @@
             <nav aria-label="Breadcrumb">
                 <ol class="flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse !pl-0">
                     <li class="inline-flex items-center">
-                        <a href="/dashboard" class="inline-flex items-center text-sm font-medium text-body hover:text-fg-brand">
+                        <a href="/dashboard" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-gray-600">
                             <svg class="w-4 h-4 me-1.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m4 12 8-8 8 8M6 10.5V19a1 1 0 0 0 1 1h3v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3h3a1 1 0 0 0 1-1v-8.5"/>
                             </svg>
@@ -15,15 +15,15 @@
                     </li>
                     <li aria-current="page">
                         <div class="flex items-center space-x-1.5">
-                            <svg class="w-3.5 h-3.5 rtl:rotate-180 text-body" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <svg class="w-3.5 h-3.5 rtl:rotate-180 text-gray-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/>
                             </svg>
-                            <span class="inline-flex items-center text-sm font-medium text-body-subtle">Knowledge Base</span>
+                            <span class="inline-flex items-center text-sm font-medium text-gray-500">Knowledge Base</span>
                         </div>
                     </li>
                 </ol>
             </nav>
-            <h2 class="font-figtree !font-semibold">Knowledge Base</h2>
+            <h2 class="font-sans !font-semibold">Knowledge Base</h2>
         </div>
     </section>
 
@@ -45,7 +45,6 @@
                         </div>
                     </div>
 
-                    {{-- 1. UBAH KE ROUTE PACKAGE: chatbot.kb.upload --}}
                     <form action="{{ route('chatbot.kb.upload') }}" method="POST" enctype="multipart/form-data" id="uploadForm">
                         @csrf
 
@@ -80,7 +79,6 @@
 
                     {{-- Synchronize Button (separate form) --}}
                     <div class="mt-3">
-                        {{-- 2. UBAH KE ROUTE PACKAGE: chatbot.kb.sync --}}
                         <form action="{{ route('chatbot.kb.sync') }}" method="POST" class="inline" id="syncForm">
                             @csrf
                             <button type="submit" id="syncBtn"
@@ -100,7 +98,6 @@
                 {{-- Toolbar --}}
                 <div class="flex items-center justify-between p-4 border-b border-gray-200 flex-wrap gap-3">
                     <div class="flex items-center gap-2 flex-1 min-w-[200px] max-w-md">
-                        {{-- 3. UBAH KE ROUTE PACKAGE: chatbot.kb --}}
                         <form method="GET" action="{{ route('chatbot.kb') }}" class="flex-1">
                             <div class="relative">
                                 <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -115,7 +112,6 @@
                             </div>
                         </form>
 
-                        {{-- 4. UBAH KE ROUTE PACKAGE: chatbot.kb --}}
                         <a href="{{ route('chatbot.kb', ['search' => request('search'), 'sort' => request('sort', 'latest') === 'latest' ? 'oldest' : 'latest']) }}"
                             class="inline-flex items-center gap-2 border border-gray-300 bg-gray-50 hover:bg-gray-100 text-gray-600 text-sm font-medium px-3 py-2 rounded-lg transition-colors duration-150 whitespace-nowrap">
                             <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -222,7 +218,6 @@
                                     </td>
                                     <td class="px-4 py-3">
                                         <div class="flex items-center justify-center">
-                                            {{-- 5. UBAH KE ROUTE PACKAGE: chatbot.kb.destroy --}}
                                             <a href="#"
                                                 class="inline-flex items-center gap-1 text-sm font-medium text-white bg-[#F23557] hover:bg-[#D4294B] px-3 py-1.5 rounded-lg transition-colors duration-150 delete-doc"
                                                 data-url="{{ route('chatbot.kb.destroy', $doc->id) }}">
@@ -268,9 +263,9 @@
 
         </div>
     </div>
-@endsection
 
-@push('custome-js')
+    {{-- SweetAlert2 CDN (self-contained, no host dependency) --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const fileInput = document.getElementById('fileInput');
@@ -350,8 +345,7 @@
                 btn.addEventListener('click', function() {
                     const id = this.dataset.id;
                     const dot = this.querySelector('span');
-                    
-                    // 6. UBAH KE ROUTE PACKAGE SECARA DINAMIS DI JS: chatbot.kb.toggle
+
                     const toggleUrl = `{{ route('chatbot.kb.toggle', ':id') }}`.replace(':id', id);
 
                     fetch(toggleUrl, {
@@ -409,4 +403,4 @@
             });
         });
     </script>
-@endpush
+@endsection

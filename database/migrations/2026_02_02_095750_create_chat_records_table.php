@@ -10,13 +10,12 @@ return new class extends Migration
     {
         Schema::create('chat_records', function (Blueprint $table) {
             $table->id();
-            $table->string('session_code')->nullable(); 
-            $table->text('client_message')->nullable(); 
-            $table->text('ai_message')->nullable(); 
-
-            $table->longText('admin_message')->nullable(); 
-            
-            $table->dateTime('waktu')->nullable(); 
+            $table->string('session_code')->nullable();
+            $table->enum('type', ['ai', 'admin'])->default('ai');
+            $table->text('client_message')->nullable();
+            $table->text('ai_message')->nullable();
+            $table->longText('admin_message')->nullable();
+            $table->dateTime('waktu')->nullable();
             $table->timestamps();
         });
     }

@@ -1,53 +1,52 @@
-# Aranus Chatbot V2 (Minara AI)
+# Aranus Chatbot — Minara AI
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/aranus-tech/chatbot.svg?style=flat-square)](https://packagist.org/packages/aranus-tech/chatbot)
 [![Total Downloads](https://img.shields.io/packagist/dt/aranus-tech/chatbot.svg?style=flat-square)](https://packagist.org/packages/aranus-tech/chatbot)
 [![License](https://img.shields.io/packagist/l/aranus-tech/chatbot.svg?style=flat-square)](https://packagist.org/packages/aranus-tech/chatbot)
 
-Aranus Chatbot adalah package Laravel profesional untuk mengintegrasikan chatbot AI **Minara**, sistem **Live Chat Handover** (Admin), dan **RAG Knowledge Base** ke dalam ekosistem website Anda secara *plug-and-play*.
+Package Laravel untuk mengintegrasikan chatbot AI **Minara**, sistem **Live Chat Handover** ke admin, dan **RAG Knowledge Base** ke website Laravel mana saja secara *plug-and-play*.
 
 ---
 
-## ✨ Fitur Utama (V2.0)
+## Fitur
 
-- 🤖 **Minara AI Widget**: Chatbot cerdas berbasis AI yang siap membantu pengunjung website 24/7.
-- 👨‍💼 **Human-in-the-Loop (Live Chat)**: Fitur oper alih percakapan dari AI ke Admin secara *real-time* menggunakan WebSocket.
-- 📚 **RAG Knowledge Base**: Latih AI Minara dengan mengunggah dokumen (PDF, TXT, Excel, Docx) langsung dari dashboard.
-- 🔍 **Dataset Viewer**: Pantau konten teks yang berhasil diekstraksi dan dipelajari oleh AI.
-- 📝 **Advanced Chat Logs**: Riwayat percakapan lengkap yang dipisahkan antara interaksi AI dan Admin.
-- 🎨 **UI Isolation**: Menggunakan *pre-compiled CSS* sehingga tampilan chatbot tetap konsisten tanpa merusak desain website asli klien (tidak memerlukan Tailwind di aplikasi utama).
-
----
-
-## 📋 Persyaratan Sistem
-
-- **PHP**: `^8.1`
-- **Laravel**: `^10.0` | `^11.0` | `^12.0`
-- **Database**: MySQL / PostgreSQL / SQLite
+- **Minara AI Widget** — chatbot cerdas berbasis AI siap membantu pengunjung 24/7
+- **Live Chat (Human-in-the-Loop)** — oper alih percakapan dari AI ke admin secara real-time via WebSocket
+- **RAG Knowledge Base** — upload dokumen (PDF, TXT, Excel, DOCX) untuk melatih AI langsung dari dashboard
+- **Dataset Viewer** — lihat teks yang berhasil diekstrak dan dipelajari oleh AI
+- **Chat Log** — riwayat percakapan AI dan admin yang terpisah dengan filter tanggal
+- **Notifikasi Email** — admin mendapat email otomatis saat pengunjung meminta Live Chat
+- **UI Isolation** — CSS pre-compiled, tidak memerlukan Tailwind CSS di aplikasi host
 
 ---
 
-## 🚀 Instalasi
+## Persyaratan
 
-### 1. Instal melalui Composer
+- PHP `^8.1`
+- Laravel `^10.0 | ^11.0 | ^12.0`
+- Database MySQL / PostgreSQL / SQLite
 
-Tarik package ke dalam project Laravel Anda:
+---
+
+## Instalasi
+
+### 1. Install via Composer
 
 ```bash
 composer require aranus-tech/chatbot
 ```
 
-### 2. Jalankan Perintah Instalasi
+### 2. Jalankan perintah install
 
-Perintah ini akan menyalin file konfigurasi (`config/chatbot.php`) dan aset visual (CSS & Ikon) ke folder publik project Anda:
+Perintah ini menerbitkan file konfigurasi (`config/chatbot.php`) dan aset CSS/ikon ke folder `public/vendor/chatbot`:
 
 ```bash
 php artisan chatbot:install
 ```
 
-### 3. Jalankan Migrasi Database
+### 3. Jalankan migrasi
 
-Package ini secara otomatis memuat migrasi yang diperlukan untuk tabel log chat dan dokumen:
+Package secara otomatis mendaftarkan 2 tabel yang dibutuhkan:
 
 ```bash
 php artisan migrate
@@ -55,61 +54,188 @@ php artisan migrate
 
 ---
 
-## ⚙️ Konfigurasi
+## Konfigurasi
 
-### 1. Environment Variables (.env)
-Tambahkan variabel berikut untuk menghubungkan widget dengan server AI Aranus:
+### 1. Environment variables (`.env`)
+
+Tambahkan variabel berikut ke file `.env` project Anda:
 
 ```env
-# Endpoint WebSocket & API
+# WebSocket AI dan Admin
 CHATBOT_WS_URL="wss://aranus-aranus-chatbot-plugin.hf.space/ws/chat"
 CHATBOT_ADMIN_WS_URL="wss://aranus-aranus-chatbot-plugin.hf.space/ws/admin"
+
+# Endpoint upload dokumen ke AI server
 CHATBOT_UPLOAD_URL="https://aranus-aranus-chatbot-plugin.hf.space/upload"
 
-# Notifikasi
-ADMIN_NOTIFICATION_EMAIL="admin@aranustech.co.id"
+# Email yang menerima notifikasi saat pengunjung minta Live Chat
+ADMIN_NOTIFICATION_EMAIL="admin@example.com"
 ```
 
-### 2. Konfigurasi Dashboard (config/chatbot.php)
-Anda dapat menyesuaikan integrasi dashboard agar selaras dengan sistem admin yang sudah ada:
+### 2. Konfigurasi dashboard (`config/chatbot.php`)
+
+Setelah `chatbot:install`, edit `config/chatbot.php` agar sesuai dengan struktur aplikasi Anda:
 
 ```php
 return [
-    'layout'     => 'layouts.app',      // Nama blade layout utama Anda
-    'prefix'     => 'dashboard',       // Prefix URL (misal: dashboard/live-chat)
-    'middleware' => ['web', 'auth'],   // Middleware untuk mengamankan akses admin
+    // Nama layout Blade utama aplikasi Anda
+    // Halaman dashboard chatbot akan di-extend dari layout ini
+    'layout' => 'layouts.app',
+
+    // Prefix URL untuk semua halaman dashboard chatbot
+    // Contoh: 'dashboard' -> /dashboard/chatlog, /dashboard/live-chat, dst.
+    'prefix' => 'dashboard',
+
+    // Middleware yang melindungi halaman dashboard chatbot
+    'middleware' => ['web', 'auth'],
 ];
 ```
 
 ---
 
-## 🖥️ Penggunaan
+## Penggunaan
 
-### 1. Menampilkan Widget di Website
-Tambahkan pemanggilan CSS di tag `<head>` dan directive blade sebelum tag penutup `</body>` pada file layout utama Anda (misal: `app.blade.php`):
+### Widget Chatbot (Frontend)
+
+Tambahkan baris berikut ke layout utama website Anda (misalnya `resources/views/layouts/app.blade.php`):
 
 ```blade
 <head>
+    {{-- CSS widget chatbot --}}
     <link rel="stylesheet" href="{{ asset('vendor/chatbot/chatbot-ui.css') }}">
 </head>
+
 <body>
-    
+    {{-- Konten website Anda --}}
+
+    {{-- Widget chatbot — letakkan sebelum </body> --}}
     @chatbot
 </body>
 ```
 
-### 2. Integrasi Dashboard Admin
-Package ini secara otomatis mendaftarkan rute dashboard. Anda cukup menambahkan tautan berikut ke sidebar navigasi admin Anda:
-
-| Menu | Nama Route | Deskripsi |
-|------|------------|-----------|
-| **Live Chat** | `route('chatbot.livechat')` | Membalas pesan klien secara real-time |
-| **Knowledge Base** | `route('chatbot.kb')` | Upload dokumen pelatihan AI |
-| **Dataset** | `route('chatbot.kb.dataset')` | Lihat teks hasil ekstraksi AI |
-| **Chat Logs** | `route('chatbot.index')` | Riwayat percakapan AI & Admin |
+Widget akan muncul sebagai tombol mengambang di pojok kanan bawah halaman.
 
 ---
 
-## 📄 Lisensi
+### Dashboard Admin
 
-Package ini dilisensikan di bawah MIT License. Dikembangkan oleh Aranus Technology.
+Package mendaftarkan rute dashboard secara otomatis berdasarkan `prefix` dan `middleware` di `config/chatbot.php`.
+
+Tambahkan tautan berikut ke sidebar navigasi admin Anda:
+
+```blade
+<a href="{{ route('chatbot.index') }}">Chat Log</a>
+<a href="{{ route('chatbot.livechat') }}">Live Chat</a>
+<a href="{{ route('chatbot.kb') }}">Knowledge Base</a>
+<a href="{{ route('chatbot.kb.dataset') }}">Dataset</a>
+```
+
+**Daftar lengkap named routes:**
+
+| Route Name | Method | URL (default prefix: `dashboard`) | Deskripsi |
+|---|---|---|---|
+| `chatbot.index` | GET | `/dashboard/chatlog` | Riwayat percakapan AI & Admin |
+| `chatbot.livechat` | GET | `/dashboard/live-chat` | Dashboard Live Chat admin |
+| `chatbot.kb` | GET | `/dashboard/knowledge-base` | Upload & kelola dokumen AI |
+| `chatbot.kb.upload` | POST | `/dashboard/knowledge-base/upload` | Upload dokumen |
+| `chatbot.kb.sync` | POST | `/dashboard/knowledge-base/sync` | Sinkronisasi ulang ke AI server |
+| `chatbot.kb.toggle` | POST | `/dashboard/knowledge-base/toggle/{id}` | Aktifkan/nonaktifkan dokumen |
+| `chatbot.kb.destroy` | DELETE | `/dashboard/knowledge-base/{id}` | Hapus dokumen |
+| `chatbot.kb.dataset` | GET | `/dashboard/knowledge-base/dataset` | Lihat teks hasil ekstraksi |
+
+**Endpoint API publik (digunakan oleh widget secara internal):**
+
+| Route Name | Method | URL | Deskripsi |
+|---|---|---|---|
+| `chatbot.store` | POST | `/aranus-chatbot/store-chat` | Simpan percakapan AI |
+| `chatbot.store.admin` | POST | `/aranus-chatbot/store-admin-chat` | Simpan percakapan admin |
+| `chatbot.notify.handover` | POST | `/aranus-chatbot/notify-admin-handover` | Kirim email notifikasi handover |
+| `chatbot.popular` | GET | `/aranus-chatbot/popular-questions` | Ambil pertanyaan populer |
+
+---
+
+### Kustomisasi Tampilan
+
+Jika ingin mengubah tampilan halaman dashboard, publish view-nya terlebih dahulu:
+
+```bash
+php artisan vendor:publish --tag=chatbot-views
+```
+
+File view akan disalin ke `resources/views/vendor/chatbot/`. Setelah itu Anda bisa mengedit bebas tanpa mempengaruhi package aslinya.
+
+---
+
+## Struktur Tabel Database
+
+### `chat_records`
+
+| Kolom | Tipe | Keterangan |
+|---|---|---|
+| `id` | bigint | Primary key |
+| `session_code` | string | Kode sesi unik pengunjung |
+| `type` | enum('ai','admin') | Jenis percakapan |
+| `client_message` | text | Pesan dari pengunjung |
+| `ai_message` | text | Balasan dari AI (nullable) |
+| `admin_message` | longtext | JSON array percakapan admin (nullable) |
+| `waktu` | datetime | Waktu percakapan |
+
+### `knowledge_documents`
+
+| Kolom | Tipe | Keterangan |
+|---|---|---|
+| `id` | bigint | Primary key |
+| `title` | string | Judul dokumen |
+| `original_name` | string | Nama file asli |
+| `filename` | string | Nama file tersimpan |
+| `file_path` | string | Path di storage |
+| `file_size` | bigint | Ukuran file (bytes) |
+| `file_type` | string | Ekstensi file |
+| `content` | longtext | Teks hasil ekstraksi AI (nullable) |
+| `status` | enum('active','inactive') | Status aktif/nonaktif |
+| `sync_status` | enum('pending','synced','failed') | Status sinkronisasi ke AI server |
+| `uploaded_by` | string | Nama admin yang upload |
+
+---
+
+## Publish Aset Secara Manual
+
+Jika perlu menerbitkan aset secara terpisah:
+
+```bash
+# Konfigurasi
+php artisan vendor:publish --tag=chatbot-config
+
+# Aset CSS & ikon (wajib untuk widget)
+php artisan vendor:publish --tag=chatbot-assets
+
+# View (opsional, untuk kustomisasi tampilan)
+php artisan vendor:publish --tag=chatbot-views
+```
+
+---
+
+## Deploy ke Packagist
+
+1. Push kode ke repository GitHub (pastikan `composer.json` sudah benar)
+2. Buka [packagist.org](https://packagist.org) dan login
+3. Klik **Submit** dan masukkan URL repository GitHub
+4. Aktifkan **GitHub Webhook** agar versi baru otomatis terdeteksi
+5. Tag versi rilis pertama di Git:
+
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+Setelah itu package dapat diinstall dengan:
+
+```bash
+composer require aranus-tech/chatbot
+```
+
+---
+
+## Lisensi
+
+MIT License — dikembangkan oleh [Aranus Technology](https://aranustech.co.id).

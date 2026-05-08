@@ -6,7 +6,7 @@
             <nav aria-label="Breadcrumb">
                 <ol class="flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse !pl-0">
                     <li class="inline-flex items-center">
-                        <a href="/dashboard" class="inline-flex items-center text-sm font-medium text-body hover:text-fg-brand">
+                        <a href="/dashboard" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-gray-600">
                             <svg class="w-4 h-4 me-1.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m4 12 8-8 8 8M6 10.5V19a1 1 0 0 0 1 1h3v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3h3a1 1 0 0 0 1-1v-8.5"/>
                             </svg>
@@ -15,24 +15,23 @@
                     </li>
                     <li>
                         <div class="flex items-center space-x-1.5">
-                            <svg class="w-3.5 h-3.5 rtl:rotate-180 text-body" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <svg class="w-3.5 h-3.5 rtl:rotate-180 text-gray-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/>
                             </svg>
-                            {{-- 1. UBAH KE ROUTE PACKAGE: chatbot.kb --}}
-                            <a href="{{ route('chatbot.kb') }}" class="inline-flex items-center text-sm font-medium text-body hover:text-fg-brand">Knowledge Base</a>
+                            <a href="{{ route('chatbot.kb') }}" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-gray-600">Knowledge Base</a>
                         </div>
                     </li>
                     <li aria-current="page">
                         <div class="flex items-center space-x-1.5">
-                            <svg class="w-3.5 h-3.5 rtl:rotate-180 text-body" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <svg class="w-3.5 h-3.5 rtl:rotate-180 text-gray-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/>
                             </svg>
-                            <span class="inline-flex items-center text-sm font-medium text-body-subtle">Dataset</span>
+                            <span class="inline-flex items-center text-sm font-medium text-gray-500">Dataset</span>
                         </div>
                     </li>
                 </ol>
             </nav>
-            <h2 class="font-figtree !font-semibold">Dataset Knowledge Base</h2>
+            <h2 class="font-sans !font-semibold">Dataset Knowledge Base</h2>
         </div>
     </section>
 
@@ -55,7 +54,6 @@
                     </div>
 
                     {{-- Search --}}
-                    {{-- 2. UBAH KE ROUTE PACKAGE: chatbot.kb.dataset --}}
                     <form method="GET" action="{{ route('chatbot.kb.dataset') }}" class="w-full sm:w-auto sm:min-w-[300px]">
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -150,7 +148,6 @@
                         <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125" />
                     </svg>
                     <p class="text-gray-400 text-sm">Belum ada dataset. Upload dokumen terlebih dahulu.</p>
-                    {{-- 3. UBAH KE ROUTE PACKAGE: chatbot.kb --}}
                     <a href="{{ route('chatbot.kb') }}" class="inline-flex items-center gap-2 mt-4 text-sm font-medium text-[#00A86B] hover:underline">
                         <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0 3 3m-3-3-3 3M6.75 19.5a4.5 4.5 0 0 1-1.41-8.775 5.25 5.25 0 0 1 10.233-2.33 3 3 0 0 1 3.758 3.848A3.752 3.752 0 0 1 18 19.5H6.75Z" />
@@ -177,9 +174,7 @@
 
         </div>
     </div>
-@endsection
 
-@push('custome-js')
     <script>
         function toggleContent(contentId, chevronId) {
             const content = document.getElementById(contentId);
@@ -188,4 +183,4 @@
             chevron.classList.toggle('rotate-180');
         }
     </script>
-@endpush
+@endsection

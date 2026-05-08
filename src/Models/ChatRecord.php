@@ -13,9 +13,10 @@ class ChatRecord extends Model
 
     protected $fillable = [
         'session_code',
+        'type',
         'client_message',
         'ai_message',
-        'admin_message', // <-- INI YANG WAJIB DITAMBAHKAN 🔥
+        'admin_message',
         'waktu',
     ];
 
