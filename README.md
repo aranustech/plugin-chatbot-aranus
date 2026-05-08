@@ -10,15 +10,14 @@ Package Laravel untuk mengintegrasikan chatbot AI **Minara**, sistem **Live Chat
 
 ## Fitur
 
-- **Minara AI Widget** — chatbot cerdas berbasis AI siap membantu pengunjung 24/7
-- **Live Chat (Human-in-the-Loop)** — oper alih percakapan dari AI ke admin secara real-time via WebSocket
-- **RAG Knowledge Base** — upload dokumen (PDF, TXT, Excel, DOCX) untuk melatih AI langsung dari dashboard
-- **Dataset Viewer** — lihat teks yang berhasil diekstrak dan dipelajari oleh AI
-- **Chat Log** — riwayat percakapan AI dan admin yang terpisah dengan filter tanggal
-- **Notifikasi Email** — admin mendapat email otomatis saat pengunjung meminta Live Chat
-- **UI Isolation** — CSS pre-compiled, tidak memerlukan Tailwind CSS di aplikasi host
-
----
+- 🤖 **Minara AI Widget**: Chatbot cerdas berbasis AI yang siap membantu pengunjung website 24/7.
+- 👨‍💼 **Human-in-the-Loop (Live Chat)**: Fitur oper alih percakapan dari AI ke Admin secara *real-time* menggunakan WebSocket.
+- 📚 **RAG Knowledge Base**: Latih AI Minara dengan mengunggah dokumen (PDF, TXT, Excel, Docx) langsung dari dashboard.
+- 🔍 **Dataset Viewer**: Pantau teks yang berhasil diekstraksi dan dipelajari oleh AI dari dokumen yang diunggah.
+- 📝 **Advanced Chat Logs**: Rekaman riwayat obrolan yang terpisah antara interaksi AI dan Admin dengan filter rentang tanggal.
+- 🔍 **Dataset Viewer**: Pantau konten teks yang berhasil diekstraksi dan dipelajari oleh AI.
+- 📝 **Advanced Chat Logs**: Riwayat percakapan lengkap yang dipisahkan antara interaksi AI dan Admin.
+- 🎨 **UI Isolation**: Menggunakan *pre-compiled CSS* sehingga tampilan chatbot tetap konsisten tanpa merusak desain website asli klien (tidak memerlukan Tailwind di aplikasi utama).---
 
 ## Persyaratan
 
@@ -214,28 +213,3 @@ php artisan vendor:publish --tag=chatbot-views
 ```
 
 ---
-
-## Deploy ke Packagist
-
-1. Push kode ke repository GitHub (pastikan `composer.json` sudah benar)
-2. Buka [packagist.org](https://packagist.org) dan login
-3. Klik **Submit** dan masukkan URL repository GitHub
-4. Aktifkan **GitHub Webhook** agar versi baru otomatis terdeteksi
-5. Tag versi rilis pertama di Git:
-
-```bash
-git tag v1.0.0
-git push origin v1.0.0
-```
-
-Setelah itu package dapat diinstall dengan:
-
-```bash
-composer require aranus-tech/chatbot
-```
-
----
-
-## Lisensi
-
-MIT License — dikembangkan oleh [Aranus Technology](https://aranustech.co.id).
